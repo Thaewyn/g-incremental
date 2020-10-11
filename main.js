@@ -67,14 +67,14 @@ function calcWeight() {
 
 function updateDisplay(rate) {
   //update progress bar
-  /*let progresstxt = Math.floor((currentPleasure/pleasureThreshold)*100)+"%";
+  let progresstxt = Math.floor((currentPleasure/pleasureThreshold)*100)+"%";
   //console.log(rate+", "+pleasureThreshold+" - "+(rate/pleasureThreshold));
   if((rate/pleasureThreshold) < 0.05) {
     $('#pleasureprogress').css("width",progresstxt);
   } else {
     $('#pleasureprogress').css("width","100%");
   }
-  $('#pleasureprogress').text(progresstxt);*/
+  $('#pleasureprogress').text(progresstxt);
 
   //update girl's stats
   $('.girlstats .height .num').text((girlStats.height/10)+" cm");
