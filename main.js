@@ -1,5 +1,13 @@
 console.log("loaded main.js");
 
+let silhouettePanel = $(".silhouette");
+let logPanel = $(".statuslog");
+let statusLogList = $(".statuslog .display");
+let adventurePanel = $(".adventurestatus");
+let portalPanel = $(".portaldetails");
+let controlPanel = $(".maincontrols");
+let relicPanel = $(".relics");
+
 let growthStats = { //change per growth
   height: 10,
   bust: 2,
@@ -14,8 +22,8 @@ let girlStats = { //all distance stats in millimeters.
   height: 1500,
   bust: 750, //bust actual. band size is 50% of height.
   waist: 600, //minimum is 40% of height
-  hips: 750, //minimum 40% of height
-  weight: 45,
+  hips: 750, //minimum 50% of height
+  weight: 45, //kilograms
   bmi: 20,
   lactation: 0,
   fertility: 1
@@ -49,7 +57,7 @@ function applyGrowth() {
   //half of height is applied to BWH because of band size increase
   let newBust = (growthStats.height * 0.5) + growthStats.bust;
   girlStats.bust += newBust;
-  let newwaist = (growthStats.height * 0.5) + growthStats.waist;
+  let newwaist = (growthStats.height * 0.4) + growthStats.waist;
   girlStats.waist += newwaist;
   let newhips = (growthStats.height * 0.5) + growthStats.hips;
   girlStats.hips += newhips;
@@ -70,11 +78,13 @@ function updateDisplay(rate) {
   let progresstxt = Math.floor((currentPleasure/pleasureThreshold)*100)+"%";
   //console.log(rate+", "+pleasureThreshold+" - "+(rate/pleasureThreshold));
   if((rate/pleasureThreshold) < 0.05) {
-    $('#pleasureprogress').css("width",progresstxt);
+    //$('#pleasureprogress').css("width",progresstxt);
+    $(".statuscontent .progressbar > .fill").css("height",progresstxt);
   } else {
-    $('#pleasureprogress').css("width","100%");
+    //$('#pleasureprogress').css("width","100%");
+    $(".statuscontent .progressbar > .fill").css("height","100%");
   }
-  $('#pleasureprogress').text(progresstxt);
+  //$('#pleasureprogress').text(progresstxt);
 
   //update girl's stats
   $('.girlstats .height .num').text((girlStats.height/10)+" cm");
@@ -88,6 +98,12 @@ function updateDisplay(rate) {
   $('.growthstats .bust .num').text((growthStats.bust/10)+" cm");
   $('.growthstats .waist .num').text((growthStats.waist/10)+" cm");
   $('.growthstats .hips .num').text((growthStats.hips/10)+" cm");
+}
+
+function addItemToLog(data, highlight="plain") {
+  $(".statuslog .display .item.new").removeClass("new");
+  let newItem = $("<div class='item new'>"+data+"</div>");
+  statusLogList.prepend(newItem);
 }
 
 // Run UI update code every 10ms: 1/100 of a second
@@ -105,13 +121,4 @@ window.setInterval(function () {
   }
   
   updateDisplay(pleasureRate);
-  
-  /**
-   * Data sample:
-    Height: 250 cm - 8 feet
-    Bust: 225 cm - 125cm band, 100cm bust (39 inches... beyond Z cup already)
-    Waist: 110 cm - 40 inches, for an 8-foot tall person...
-    Hips: 225 cm - same as bust.
-    Weight: 125 kg - 275 pounds.
-   */
 }, 10);
