@@ -14,19 +14,23 @@
         <div class="row">
           <div class="col-sm-3 panel panel-full silhouette">
             <div class="statuscontent">
-              silhouette display
-              status output
               <div class="woman"></div>
               <!-- <object type="image/svg+xml" data="/assets/svg/woman/1448007.svg" class="woman">
                 Kiwi Logo? fallback image in CSS 
               </object> -->
               <!-- <img src="assets/svg/woman/1939996.svg" alt="something?" class="woman" /> -->
-              <div class="background"></div>
+              <div class="background house2"></div>
               <div class="progressbar" data-progress="30%">
                 <div class="fill"></div>
               </div>
-              <div class="resources">
-                resources
+              <div class="statsPanel">
+                <ul class="girlstats">
+                  <li class="height">Height: <span class="num"></span></li>
+                  <li class="bust">Bust: <span class="num"></span></li>
+                  <li class="waist">Waist: <span class="num"></span></li>
+                  <li class="hips">Hips: <span class="num"></span></li>
+                  <li class="weight">Weight: <span class="num"></span></li>
+                </ul>
               </div>
             </div>
           </div>
@@ -34,7 +38,7 @@
             <div class="row">
               <div class="col-sm-6 panel panel-40 statuslog">
                 <div class="display d-flex flex-column-reverse">
-                  <div class="item">Welcome</div>
+                  <!-- <div class="item">Welcome</div> -->
                 </div>
               </div>
               <div class="col-sm-6 panel panel-40 adventurestatus">
@@ -51,13 +55,20 @@
                 <div class="row">
                   <div class="col-sm-12 panel panel-30 maincontrols">
                     <div class="controlpanel">
-                      <button id="fondlebtn">Fondle</button>
+                      <button id="fondlebtn" class="btn btn-secondary">Massage</button>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="col-sm-6 panel panel-60 relics">
-                relics
+                <div class="content">
+                  <select id="relicPick">
+                    <option value="necklace">
+                      Simple Necklace
+                    </option>
+                  </select>
+                  <button class="btn btn-primary" id="relicBtn">Apply Relic</button>
+                </div>
               </div>
             </div>
           </div>

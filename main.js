@@ -7,9 +7,11 @@ let adventurePanel = $(".adventurestatus");
 let portalPanel = $(".portaldetails");
 let controlPanel = $(".maincontrols");
 let relicPanel = $(".relics");
+let silhouette = $(".statuscontent .woman");
+let relicSelect = $(".relicPick")
 
 let growthStats = { //change per growth
-  height: 10,
+  height: 300, //30cm, for testing
   bust: 2,
   waist: 0,
   hips: 1,
@@ -46,6 +48,14 @@ $('#buy-vibe').on('click', function() {
   $('#buy-vibe .count').text(pleasureTools.vibrator);
 })
 
+let growthCount = 0;
+let firstGrowthScript = [
+  "Mmmm... that feels so good!",
+  "Wait, what is happening?",
+  "Oh that feels nice...",
+  "My clothes! Am I... growing!?!",
+  "NNNgh. Getting too big! How are you doing this?!"
+]
 function applyGrowth() {
   //we got a pleasure level, apply growth to our girl.
   //dumb loop version.
@@ -62,13 +72,33 @@ function applyGrowth() {
   let newhips = (growthStats.height * 0.5) + growthStats.hips;
   girlStats.hips += newhips;
   calcWeight();
+  //addItemToLog("Growth level up!");
+  updateSilhouette();
+  if(growthCount == 0) {
+    addItemToLog("Oh wow! She seemed to really enjoy that. And I saw her get taller too!");
+  }
+  if (growthCount < firstGrowthScript.length) {
+    addItemToLog(firstGrowthScript[growthCount], "girl");
+    growthCount++;
+    if (growthCount >= firstGrowthScript.length) {
+      //out of script, trigger something else?
+    }
+  }
+}
+function updateSilhouette() {
+  //take the new numbers, update image height
+  // 100px = 1500mm / 1.5 meters = 1px = 15mm
+  let newPixelHeight = Math.floor(girlStats.height / 15);
+  console.log(silhouette);
+  console.log(silhouette.css("height"))
+  silhouette.css("background-size", newPixelHeight+"px");
 }
 
 function calcWeight() {
   //given BMI and height, we can calculate weight.
   // BMI = weight in kg / height in meters squared
   // therefore weight = BMI * height in meters squared.
-  let weight = girlStats.bmi * (girlStats.height/1000) * (girlStats.height/1000);
+  let weight = Math.round(girlStats.bmi * (girlStats.height/1000) * (girlStats.height/1000));
   girlStats.weight = weight;
   return weight;
 }
@@ -116,9 +146,57 @@ window.setInterval(function () {
     pleasureLevel++;
     $('.pleasureactual').text(pleasureLevel);
     currentPleasure = 0;
-    pleasureThreshold += 10;//(pleasureLevel * 10);
+    pleasureThreshold += 5;//(pleasureLevel * 10);
     applyGrowth();
   }
   
   updateDisplay(pleasureRate);
 }, 10);
+
+
+let prologueSpeech = [
+  "Greetings, mortal. I require your aid.",
+  "My world is dying. The women of your world could help, but they are not tall or strong enough.",
+  "This relic can prepare them, but legend says it requires the touch of a chosen one from another world to work.",
+  "You are the first I've found, so you must be the chosen. I have no other options.",
+  "Please, do what you can. You are my last hope."
+];
+let prologueStep = 0;
+let prologue = setInterval(() => {
+  addItemToLog(prologueSpeech[prologueStep], "goddess");
+  prologueStep++;
+  if(prologueStep >= prologueSpeech.length) {
+    // addItemToLog("Well, let's see what this thing can do...");
+    addRelic("necklace");
+    relicPanel.css("opacity",1);
+    clearInterval(prologue);
+  }
+}, 100); //TODO: set up to 3000ms for final. This basically 'skips' the prologue.
+
+let relicList = {
+  necklace: {
+    html: '<option value="necklace">Simple Necklace</option>'
+  }
+}
+function addRelic(relic) {
+  if(relicList[relic]) {
+    relicSelect.append(relicList[relic].html);
+  }
+}
+let firstRelic = false;
+function applyRelic(e) {
+  e.preventDefault();
+  let which = $("#relicPick").val();
+  console.log(which);
+  if (!firstRelic) {
+    firstRelic = true;
+    silhouettePanel.css("opacity",1);
+    addItemToLog("Let's give the necklace to a coworker as a gift...");
+    setTimeout(() => {
+      addItemToLog("Nothing is happening. Wait, the goddess said something about 'touch'? Maybe I can offer her a massage.");
+      controlPanel.css("opacity",1);
+    }, 3000)
+  }
+}
+
+$("#relicBtn").on("click", applyRelic);
